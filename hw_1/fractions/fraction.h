@@ -28,4 +28,10 @@ Fraction add ( Fraction a, Fraction b );
  */
 Fraction multiply ( Fraction a, Fraction b );
 
+/*! \fn reduce
+ *  Reduces the fraction to lowest fraction
+ *  \param a The term
+ */
+Fraction reduce ( Fraction a );
+
 #endif
