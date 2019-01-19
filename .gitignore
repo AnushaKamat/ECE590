@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 doxygen_sqlite3.db
 bin/
 build/
 html/
 latex/
 docs.config
+=======
+doxygen_sqlite3.db
+bin/
+build/
+html/
+latex/
+docs.config
+>>>>>>> f30d5813aaf5031354dbe202890d9f120c89f45e
 ~*
