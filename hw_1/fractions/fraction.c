@@ -9,7 +9,7 @@ Fraction multiply ( Fraction a, Fraction b ) {
 }
 
 Fraction reduce (Fraction a) {
-  int num , den , neg, GCD;
+  int num , den , neg = 0, GCD;
 
   if(a.num == 0 && a.den == 0){  //Case : 0/0
     num = 0;

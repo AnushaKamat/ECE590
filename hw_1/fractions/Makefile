@@ -20,8 +20,8 @@ INCDEP      := -I$(INCDIR)
 
 #Files
 DGENCONFIG  := docs.config
-HEADERS     := fraction.h
-SOURCES     := fraction.c unit_tests.c main.c
+HEADERS     := fraction.h imaginary.h
+SOURCES     := fraction.c imaginary.c unit_tests.c main.c
 OBJECTS     := $(patsubst %.c, $(BUILDDIR)/%.o, $(notdir $(SOURCES)))
 
 #Defauilt Make

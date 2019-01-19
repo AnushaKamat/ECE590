@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "fraction.h"
+#include "imaginary.h"
 #include "gtest/gtest.h"
 
 GTEST_API_ int main(int argc, char **argv) {
