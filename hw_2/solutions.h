@@ -1,8 +1,14 @@
-#include<stdlib.h>
+#include <stdlib.h>
 #ifndef SOLUTIONS_H
 #define SOLUTIONS_H
 
 //#define NULL 0
+
+//Things remaining to do :
+//1. Documentation/Comment the code
+//dddddddddddddddddddd2. ToSet function needs change(segmentation/Memory error)
+//ddddddddddddddddddd 3. Robust Test Cases
+//4. Add README file
 
 /*! @file */
 
@@ -10,7 +16,7 @@
 int running_total(int num);
 
 //Reverse in Place
-void reverse_in_place(int * collection, const int numofvalues);
+void reverse_in_place(int * collection, int numofvalues);
 
 //Reverse
 int * reverse(int * collection, int numofvalues);
@@ -36,19 +42,19 @@ typedef struct {
     double * array;
 }Stack;
 //Stack * stack = (Stack *)malloc(sizeof(Stack));
-void rpn_init(void);
+
 
 typedef enum status {
-  OK, NOT_INITIALIZED_ERROR, POP_ERROR, NEGATE_ERROR, MULT_ERROR, ADD_ERROR, OVERFLOW_ERROR
+  NOT_INITIALIZED_ERROR, OK, POP_ERROR, NEGATE_ERROR, MULT_ERROR, ADD_ERROR, OVERFLOW_ERROR
 } Status;
 
-void rpn_init(void);
-void rpn_push(double);
-void rpn_add(void);
-void rpn_negate(void);
-void rpn_multiply(void);
-double rpn_pop(void);
-Status rpn_error(void);
-void rpn_free(void);
+void rpn_init();
+void rpn_push(double val);
+void rpn_add();
+void rpn_negate();
+void rpn_multiply();
+double rpn_pop();
+Status rpn_error();
+void rpn_free();
 
 #endif
