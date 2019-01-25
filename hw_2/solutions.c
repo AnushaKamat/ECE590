@@ -12,7 +12,7 @@ void reverse_in_place(int * collection, const int numofvalues){
   for(int i = 0; i <numofvalues ; i++){
     rev[numofvalues - 1 -i] =  collection[i];
   }
-   for(int i = 0; i <numofvalues ; i++){
+  for(int i = 0; i <numofvalues ; i++){
     collection[i] = rev[i];
   }
 
@@ -35,7 +35,7 @@ int num_instances(int * collection, int numofvalues, int value){
   }
   return rep;
 }
-//might fail for 0 when used with calloc
+
 int * to_set(int * collection, int size, int * nsize ){
   int * newcollection = (int*) malloc (size * sizeof(int));
   int newsize =0;
@@ -53,7 +53,6 @@ int * to_set(int * collection, int size, int * nsize ){
       newsize++;
     }
   }
-  
   *nsize = newsize;
   return newcollection;
 }
@@ -63,7 +62,6 @@ Point * map(Point * pointCollection,int size, Point (*fptr)(Point)){
   for(int i = 0 ; i<size;i++){
     newPointCollection[i] = (*fptr)(pointCollection[i]);
   }
- // * newPointCollection = (*fptr)(* pointCollection);
   return newPointCollection;
 }
 
@@ -71,119 +69,123 @@ Point * map(Point * pointCollection,int size, Point (*fptr)(Point)){
 /*                     RPN Calculator                          */
 /***************************************************************/
 
- Stack * stack;// = (Stack *)malloc(sizeof(Stack));
- Status error = NOT_INITIALIZED_ERROR;
+static Stack stack;// = (Stack *)malloc(sizeof(Stack));
+static Status error = NOT_INITIALIZED_ERROR;
 void rpn_init(void){
-
-  stack = (Stack *)malloc(sizeof(Stack));
-  stack->size = 100; //need to realloc if more than 100 pushes happen
-  stack -> top = -1;//TOP
-  stack -> array = (double*)calloc(stack->size,sizeof(double));
+  if(error != NOT_INITIALIZED_ERROR){
+    rpn_free();
+  }
+  stack.size = 100; //need to realloc if more than 100 pushes happen
+  stack.top = -1;//TOP
+  stack.array = (double*)calloc(stack.size,sizeof(double));
   error = OK;
   return;
 }
 
 int isFull(){
-  return stack->top == stack->size -1;
+  return stack.top == stack.size -1;
 }
 
 int isEmpty(){
-  return stack->top == -1;
+  return stack.top == -1;
 }
-int is_inf(double x){
+
+int isInf(double x){
   return(x < -DBL_MAX || x > DBL_MAX);
 } 
-int flag =0;
+
+
 void rpn_push(double item){ //what if stack is not initialised and push is made ??
- if(error != NOT_INITIALIZED_ERROR){ //!=non initialised?
-   if(isFull()){
-    stack -> size += 100;
-    double  *tmp = (double *)realloc(stack->array, sizeof(double)*(stack->size));
-if (!tmp) {
-    flag = 1;
-} else {
-    stack->array = tmp;
-}
-    
-  }
-  stack -> array [++stack->top] = item;
- } 
-}
-void rpn_add(void){
-  //less than 2 operands available
-  //overflow check
-  if(error != NOT_INITIALIZED_ERROR){
-  if(stack -> top <= 0){
-    if(error == OK){
-      error = ADD_ERROR;
+  if(error != NOT_INITIALIZED_ERROR){ //If stack is not uninitialised and a push is tried to be made,  then it is not considered 
+    if(isFull()){                     // Stack is Full considered
+      stack.size *= 2;
+      double  *tmp = (double *)realloc(stack.array, sizeof(double)*(stack.size));
+      if (!tmp) {                     //new allocated pointer is a null, error case to exit
+        exit(1);
+      }
+      else {
+        stack.array = tmp;            //reallocation
+      }
     }
-  }
-  else{
-  double a = rpn_pop();
-  double b = rpn_pop();
-  
-  if(is_inf(a+b)){
-    if(error == OK){
-    error = OVERFLOW_ERROR;
-    }
-    rpn_push(0);
-  }
-  else{
-    rpn_push(a+b);
-  }
-  }
-  }
-}
-void rpn_negate(void){
-  //error for negating when there is nothing
-   if(error != NOT_INITIALIZED_ERROR){
-  if(stack ->top ==-1){
-    if(error == OK){
-      error = NEGATE_ERROR;
-    }
-  }
-  else{
-    stack ->array[stack->top] *= -1.0;
-  }
-   }
-}
-void rpn_multiply(void){
-  //less than 2 operands
-  //overflow error
-  if(error != NOT_INITIALIZED_ERROR){
-  if(stack -> top <= 0){
-    if(error == OK){
-    error = MULT_ERROR;
-    }
-  }
-  else{
-    double a = rpn_pop();
-    double b = rpn_pop();
-  if(is_inf(a*b)){
-    if (error == OK){
-    error = OVERFLOW_ERROR;
-    }
-    rpn_push(0);
-  }
-  else{
-    rpn_push(a*b);
-  }
+    stack.array [++stack.top] = item;
   } 
-  }
 }
-double rpn_pop(void){
-if(error != NOT_INITIALIZED_ERROR){
-  if(isEmpty()){
-    //initialise pop error
-    if(error == OK){
-    error = POP_ERROR;
+
+
+void rpn_add(void){
+  if(error != NOT_INITIALIZED_ERROR){   //Addded before initialising, no action
+    if(stack.top <= 0){                   // ADD ERROR : 2 operands for add is not available
+      if(error == OK){
+       error = ADD_ERROR;
+     }
     }
-    return 0;
+    else{
+     double a = rpn_pop();
+      double b = rpn_pop();
+  
+      if(isInf(a+b)){                     //OVERFLOW ERROR
+       if(error == OK){
+          error = OVERFLOW_ERROR;
+        }
+        rpn_push(0);
+      }
+      else{
+        rpn_push(a+b);
+      }
+    }
   }
-  return stack->array[stack->top--];
 }
-else 
-  return 0;
+
+
+void rpn_negate(void){
+  if(error != NOT_INITIALIZED_ERROR){   //Uninitialised Stack
+    if(stack.top ==-1){
+      if(error == OK){
+        error = NEGATE_ERROR;           //No operand to negare
+      }
+    }
+    else{
+      stack.array[stack.top] *= -1.0;   //Negate
+    }
+  }
+}
+
+void rpn_multiply(void){
+  if(error != NOT_INITIALIZED_ERROR){     //Uninitialised Stack
+    if(stack.top <= 0){
+      if(error == OK){                    //2 Operands not found
+        error = MULT_ERROR;
+      }
+    }
+    else{
+      double a = rpn_pop();
+      double b = rpn_pop();
+      if(isInf(a*b)){                     //Overflow
+        if (error == OK){
+          error = OVERFLOW_ERROR;
+        }
+        rpn_push(0);
+      }
+      else{
+        rpn_push(a*b);                    //Multiply
+      }
+    } 
+  }
+}
+
+
+double rpn_pop(void){
+  if(error != NOT_INITIALIZED_ERROR){
+    if(isEmpty()){
+      if(error == OK){
+        error = POP_ERROR;                     //nothing to pop, stack is empty , pop error
+      }
+      return 0;
+    }
+    return stack.array[stack.top--];          // pop
+  }
+  else 
+    return 0;                                 //uninitialised stack, pops 0
 }
 
 Status rpn_error(void){
@@ -191,7 +193,6 @@ Status rpn_error(void){
 }
 
 void rpn_free(void){
-  free(stack->array);//how to un-initialize
-  free(stack);
+  free(stack.array);
   error = NOT_INITIALIZED_ERROR;
 }
