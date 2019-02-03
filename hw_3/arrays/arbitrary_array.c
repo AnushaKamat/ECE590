@@ -65,25 +65,6 @@ ArbitraryArray * ArbitraryArray_new(int element_size) {
     return da;
 }
 
-void ArbitraryArray_push(ArbitraryArray * da, void * value ) {
-    ArbitraryArray_set_from_ptr(da, ArbitraryArray_size(da), value );
-}
-void ArbitraryArray_remove_ptr(ArbitraryArray * aa, void *da) {
-    assert(aa->buffer != NULL);
-    int i = 0;
-    while(i < ArbitraryArray_size(aa)){
-        DynamicArray ** ptr_da = (DynamicArray**)ArbitraryArray_get_ptr(aa,i);
-        
-        if(da ==  (*ptr_da)){
-            ArbitraryArray_set_from_ptr(aa, i, 0);
-            printf("goes into remove if case \n");
-            break;
-        }
-        i++;
-    }
-    return;
-}
-
 void ArbitraryArray_destroy(ArbitraryArray * da) {
     free(da->buffer);
     da->buffer = NULL;
@@ -131,46 +112,43 @@ void ArbitraryArray_print_debug_info(const ArbitraryArray * da) {
 }
 
 char * ArbitraryArray_to_string(const ArbitraryArray * a, char * (*element_to_string) (void * p ) ){
-
     char * str = (char *) calloc (20,ArbitraryArray_size(a)),temp[20];
     int j = 0;
-    
-    
     for ( int i=0; i < ArbitraryArray_size(a); i++ ) {
-        
         if ( ArbitraryArray_get_ptr (a,i) == 0 ) {
             snprintf ( temp, 20, "0" );
-            
-        } else {
-            
+        } 
+        else {
             snprintf ( temp, 20,(*element_to_string) (ArbitraryArray_get_ptr(a,i)) ); 
-            
         }
 
         if ( i < ArbitraryArray_size(a) - 1 ) {
             sprintf( str + j, "%s,", temp);
             j += strlen(temp) + 1;
-        } else {
+        } 
+        else {
             sprintf( str + j, "%s", temp);
             j += strlen(temp);
         }
     }
-    
     return str;
+}
 
+void ArbitraryArray_push(ArbitraryArray * da, void * value ) {
+    ArbitraryArray_set_from_ptr(da, ArbitraryArray_size(da), value );
+}
 
-
-/*
-    char * str = (char *)calloc(20,sizeof(char));
-    
-    for (int i = 0 ; i < ArbitraryArray_size(a); i++){
-        
-        strcat(str, (*element_to_string) (ArbitraryArray_get_ptr(a,i)));
-        if(i < (ArbitraryArray_size(a)-1)){
-            strcat(str,",");
+void ArbitraryArray_remove_ptr(ArbitraryArray * aa, void *da) {           //***********Check ***********//
+    assert(aa->buffer != NULL);
+    int i = 0;
+    while(i < ArbitraryArray_size(aa)){
+        DynamicArray ** ptr_da = (DynamicArray**)ArbitraryArray_get_ptr(aa,i);
+        if(da ==  (*ptr_da)){
+            ArbitraryArray_set_from_ptr(aa, i, 0);
+            printf("goes into remove if case \n");
+            break;
         }
-        
+        i++;
     }
-    return str;*/
-    
+    return;
 }

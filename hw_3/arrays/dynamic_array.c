@@ -66,6 +66,7 @@ static DynamicArray* DynamicArray_sort (const DynamicArray * da){
 
 /* public functions **********************************************************/
 
+/* Arbitrary Array to save all pointers to DynamicArrays created*/
 static ArbitraryArray* ptrtoDA = ArbitraryArray_new(sizeof(DynamicArray *)); 
 
 
@@ -82,10 +83,9 @@ DynamicArray * DynamicArray_new(void) {
 }
 
 void DynamicArray_destroy(DynamicArray * da) {
-    
     free(da->buffer);
     da->buffer = NULL;
-    ArbitraryArray_remove_ptr(ptrtoDA, da);
+    ArbitraryArray_remove_ptr(ptrtoDA, da);  //***********Check ***********//
     return;
 }
 
@@ -192,34 +192,26 @@ DynamicArray * DynamicArray_map(const DynamicArray * da, double (*f) (double)) {
 }
 
 DynamicArray * DynamicArray_subarray(DynamicArray * da, int a, int b) {
-
-  assert(da->buffer != NULL);
-
-  if ( b < a ) {
-      printf("DynamicArray_subarray called with invalid indices (b=%d<a%d)", b, a);
-      exit(1);
-  }
-
-  DynamicArray * result = DynamicArray_new();
- 
-  for (int i=a; i<b; i++) {
-      DynamicArray_push(result,DynamicArray_get(da, i));
-  }
-
-  return result;
-
+    assert(da->buffer != NULL);
+    if ( b < a ) {
+        printf("DynamicArray_subarray called with invalid indices (b=%d<a%d)", b, a);
+        exit(1);
+    }
+    DynamicArray * result = DynamicArray_new();
+    for (int i=a; i<b; i++) {
+        DynamicArray_push(result,DynamicArray_get(da, i));
+    }
+    return result;
 }
 
 double DynamicArray_sum ( const DynamicArray * da ){ //check divide by zero
    int sz;
    double sum = 0;
    assert(da->buffer != NULL);
-   //assert(DynamicArray_size(da) > 0);
    sz = DynamicArray_size(da);
    for(int i =0 ; i<sz; i++){
        sum += DynamicArray_get(da, i);
    } 
-   
    return sum;
 }
 
@@ -236,39 +228,28 @@ double DynamicArray_mean ( const DynamicArray * da ){ //check divide by zero
 
 double DynamicArray_min ( const DynamicArray * da ){
     double min;
-
     assert(da->buffer != NULL);
     assert(DynamicArray_size(da) > 0);
-
     DynamicArray * sort_da =  DynamicArray_sort(da);
     min =  DynamicArray_get(sort_da, 0);
     DynamicArray_destroy(sort_da);  
-
     return min;
 }
 double DynamicArray_max ( const DynamicArray * da ){
-    
     double max;
-
     assert(da->buffer != NULL);
     assert(DynamicArray_size(da) > 0);
-
     DynamicArray * sort_da =  DynamicArray_sort(da);
     max =  DynamicArray_get(sort_da, DynamicArray_size(da)-1);
     DynamicArray_destroy(sort_da);  
-
     return max;
 }
 double DynamicArray_median ( const DynamicArray * da ){
-
     double median = 0;
-
     assert(da->buffer != NULL);
     assert(DynamicArray_size(da) > 0);
-
     DynamicArray * sort_da =  DynamicArray_sort(da);
     DynamicArray_print_debug_info(sort_da);
-    
     if(DynamicArray_size(sort_da)%2 == 0){
         median = DynamicArray_get(sort_da, (int)DynamicArray_size(da)/2)+DynamicArray_get(sort_da, (int)((DynamicArray_size(da)/2)-1));
         median /=2;
@@ -276,14 +257,10 @@ double DynamicArray_median ( const DynamicArray * da ){
     else{
         median = DynamicArray_get(sort_da, (int)(DynamicArray_size(da)/2));
     }
-
-    
-
     DynamicArray_destroy(sort_da);  
-
     return median;
 }
-/*not sure about first and last , if they shud return or change len as well*/
+
 double DynamicArray_last (const DynamicArray * da ){
     assert(da->buffer != NULL);
     assert(DynamicArray_size(da) > 0);
@@ -296,7 +273,6 @@ double DynamicArray_first (const DynamicArray * da ){
     assert(da->buffer != NULL);
     assert(DynamicArray_size(da) > 0);
     double first;
-    
     first = DynamicArray_get(da, 0);
     return first;
 }
@@ -304,10 +280,8 @@ double DynamicArray_first (const DynamicArray * da ){
 DynamicArray * DynamicArray_copy ( const DynamicArray * da ){
     assert(da->buffer != NULL);
     assert(DynamicArray_size(da) > 0);
-
     DynamicArray * copy_da = DynamicArray_new();
-    int sz = DynamicArray_size(da);
-    
+    int sz = DynamicArray_size(da);  
     for(int i = 0; i<sz; i++){
         DynamicArray_set(copy_da, i, DynamicArray_get(da,i) );
     }
@@ -315,8 +289,6 @@ DynamicArray * DynamicArray_copy ( const DynamicArray * da ){
 }
 
 DynamicArray * DynamicArray_range ( double a, double b, double step){
-    
-    //assert(step > 0 ? a < b :a > b);  //Dont know how to set assertion if a>b with step also increasing
     DynamicArray * da = DynamicArray_new();
     int flag = 0;
     if (step > 0){
@@ -336,8 +308,6 @@ DynamicArray * DynamicArray_range ( double a, double b, double step){
             DynamicArray_set(da,i,a+i*step);
         }
     }
-    
-
     return da;
 }
 DynamicArray * DynamicArray_concat ( const DynamicArray * a, const DynamicArray * b ){
@@ -374,7 +344,6 @@ DynamicArray * DynamicArray_take(const DynamicArray *da,const int n){
     }
     else{
         //n is -ve take from back and append with zeros if surpassed
-        
         if(abs(n) < DynamicArray_size(da)){
             for(int i = DynamicArray_size(da) + n  ; i < DynamicArray_size(da); i++){ //n +ve, take from start and append with zeros if surpasses
                 DynamicArray_set(take_da, i- DynamicArray_size(da) - n , DynamicArray_get(da,i) );
@@ -396,10 +365,8 @@ DynamicArray * DynamicArray_take(const DynamicArray *da,const int n){
     return take_da;
 }
 
-int DynamicArray_is_valid( DynamicArray * da){
+int DynamicArray_is_valid( const DynamicArray * da){          //***********Check ***********//
     assert(da->buffer != NULL);
-    
-
     assert (ptrtoDA->buffer != NULL);
     int i = 0,flag = 0;
     while(i < ArbitraryArray_size(ptrtoDA)){
@@ -427,8 +394,8 @@ int DynamicArray_is_valid( DynamicArray * da){
 
 /*! Returns the number of arrays that have been constructed to far.
  */
-int DynamicArray_num_arrays(){
-    assert(ptrtoDA->buffer != NULL);
+int DynamicArray_num_arrays(){                        //***********Check ***********//
+    assert(ptrtoDA->buffer != NULL);                  //Works for only additions but as destroy doesnt work well, decreasing doesnt return right ans
     int i = 0,count = 0;
     while(i < ArbitraryArray_size(ptrtoDA)){
         if(ArbitraryArray_get_ptr(ptrtoDA,i) != 0){
@@ -441,7 +408,7 @@ int DynamicArray_num_arrays(){
 
 /*! Destroys all arrays that have been constructed so far.
  */
-int DynamicArray_destroy_all(){
+int DynamicArray_destroy_all(){                           //***********Check ***********//
     assert(ptrtoDA->buffer != NULL);
     int i = 0;
     while(i < ArbitraryArray_size(ptrtoDA)){

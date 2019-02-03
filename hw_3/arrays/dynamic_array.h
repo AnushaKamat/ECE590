@@ -68,6 +68,10 @@ DynamicArray * DynamicArray_range ( double a, double b, double step);
  */
 DynamicArray * DynamicArray_concat ( const DynamicArray * a, const DynamicArray * b );
 
+/*! Returns a subset of array taking n points from start or end depending on sign of n. 
+ *  \param da The array
+ *  \param n The number of points to be taken off the array
+ */
 DynamicArray * DynamicArray_take(const DynamicArray *da,const int n);
 
 /*! Mathematical operations
@@ -78,9 +82,9 @@ double DynamicArray_mean ( const DynamicArray * da );
 double DynamicArray_median ( const DynamicArray * da );
 double DynamicArray_sum ( const DynamicArray * da );
 
-/*! Returns 1 if the array is valid (meaning its buffer is not NULL) and 0 otherwize.
+/*! Returns 1 if the array is valid (meaning its buffer is not NULL and that da is still functioning and not destroyed) and 0 otherwise.
  */
-int DynamicArray_is_valid( DynamicArray * da);
+int DynamicArray_is_valid(const DynamicArray * da);
 
 /*! Returns the number of arrays that have been constructed to far.
  */
@@ -90,7 +94,8 @@ int DynamicArray_num_arrays();
  */
 int DynamicArray_destroy_all();
 
-//Added new
+/*! Returns array from the dynamic array from one index to other (including both)
+ */
 DynamicArray * DynamicArray_subarray(DynamicArray *, int, int);
 
 #endif

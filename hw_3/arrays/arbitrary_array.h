@@ -37,7 +37,20 @@ void ArbitraryArray_print_debug_info(const ArbitraryArray *);
  */
 
 char * ArbitraryArray_to_string(const ArbitraryArray * a, char * (*element_to_string) (void *) );
+
+
+/* Additional functions to facilitate Q8. DynamicArray to be stored in Arbitrary Array */
+
+/*! Pushes the new element onto the Arbitrary Array
+ *  \param a The array
+ *  \param value an element to be stored in the array
+ */
 void ArbitraryArray_push(ArbitraryArray * da, void * value );
+
+/*! Removes the element da from the Arbitrary Array
+ *  \param a The array
+ *  \param da an element to be removed from the array
+ */
 void ArbitraryArray_remove_ptr(ArbitraryArray * aa, void *da);
 
 #endif
