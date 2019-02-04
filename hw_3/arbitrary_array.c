@@ -135,7 +135,7 @@ char * ArbitraryArray_to_string(const ArbitraryArray * a, char * (*element_to_st
 }
 
 void ArbitraryArray_push(ArbitraryArray * da, void * value ) {
-    ArbitraryArray_set_from_ptr(da, ArbitraryArray_size(da), value );
+    ArbitraryArray_set_from_ptr(da, ArbitraryArray_size(da), &value );
 }
 
 void ArbitraryArray_remove_ptr(ArbitraryArray * aa, void *da) {           //***********Check ***********//

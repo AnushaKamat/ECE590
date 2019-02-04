@@ -70,7 +70,7 @@ static DynamicArray* DynamicArray_sort (const DynamicArray * da){
 static ArbitraryArray* ptrtoDA = ArbitraryArray_new(sizeof(DynamicArray *)); 
 
 
-
+static int count =0;
 
 DynamicArray * DynamicArray_new(void) {
     DynamicArray * da = (DynamicArray *) malloc(sizeof(DynamicArray));
@@ -79,13 +79,14 @@ DynamicArray * DynamicArray_new(void) {
     da->origin = da->capacity / 2;
     da->end = da->origin;
     ArbitraryArray_push(ptrtoDA,da);
+    count++;
     return da;
 }
 
 void DynamicArray_destroy(DynamicArray * da) {
     free(da->buffer);
     da->buffer = NULL;
-    ArbitraryArray_remove_ptr(ptrtoDA, da);  //***********Check ***********//
+    count--;  //***********Check ***********//
     return;
 }
 
@@ -366,56 +367,33 @@ DynamicArray * DynamicArray_take(const DynamicArray *da,const int n){
 }
 
 int DynamicArray_is_valid( const DynamicArray * da){          //***********Check ***********//
-    assert(da->buffer != NULL);
-    assert (ptrtoDA->buffer != NULL);
-    int i = 0,flag = 0;
-    while(i < ArbitraryArray_size(ptrtoDA)){
+    int i = 0;
+    for (i = 0; i< ArbitraryArray_size(ptrtoDA);i++){
         DynamicArray** ptr_da = (DynamicArray**)ArbitraryArray_get_ptr(ptrtoDA,i);
-        
-        printf("Address of ptrtoDA : %d *ptrtoDA : %d ptr_da : %p *ptr_da %p; da %p &da: %d *da : %p\n",ptrtoDA,*ptrtoDA, ptr_da, *ptr_da, da,&da,*da);
-        printf("Condition %d",((*ptr_da) == (da)));
-
-        if(*ptr_da == da){
-            printf("/n works\n");
-            flag = 1;
-            break;
+        if((*ptr_da)->buffer !=NULL){
+            return 1;
         }
-        
-        i++;
     }
-    if(flag){
-        return 1;
-    }
-    else{
-        printf("\n last else \n");
-        return 0;
-    }
+    return 0;
 }
 
 /*! Returns the number of arrays that have been constructed to far.
  */
 int DynamicArray_num_arrays(){                        //***********Check ***********//
-    assert(ptrtoDA->buffer != NULL);                  //Works for only additions but as destroy doesnt work well, decreasing doesnt return right ans
-    int i = 0,count = 0;
-    while(i < ArbitraryArray_size(ptrtoDA)){
-        if(ArbitraryArray_get_ptr(ptrtoDA,i) != 0){
-            count ++;
-        }
-        i++;
-    }
     return count;
 }
 
 /*! Destroys all arrays that have been constructed so far.
  */
 int DynamicArray_destroy_all(){                           //***********Check ***********//
-    assert(ptrtoDA->buffer != NULL);
+    
     int i = 0;
-    while(i < ArbitraryArray_size(ptrtoDA)){
-        if(ArbitraryArray_get_ptr(ptrtoDA,i) != 0){
-            DynamicArray_destroy((DynamicArray *)ArbitraryArray_get_ptr(ptrtoDA,i));
+     for (i = 0; i< ArbitraryArray_size(ptrtoDA);i++){
+        DynamicArray** ptr_da = (DynamicArray**)ArbitraryArray_get_ptr(ptrtoDA,i);
+        if((*ptr_da)->buffer !=NULL){
+            (*ptr_da)->buffer =NULL;
+            count --;
         }
-        i++;
     }
 }
 
