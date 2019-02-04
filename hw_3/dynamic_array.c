@@ -86,8 +86,7 @@ DynamicArray * DynamicArray_new(void) {
 void DynamicArray_destroy(DynamicArray * da) {
     free(da->buffer);
     da->buffer = NULL;
-    count--;  //***********Check ***********//
-
+    count--;  
     return;
 }
 
@@ -376,11 +375,18 @@ int DynamicArray_search (const DynamicArray * da){
     }
     return index;
 }
-int DynamicArray_is_valid( const DynamicArray * da){          //***********Check ***********//
-    int i = 0;
-    int index = DynamicArray_search(da);
-    DynamicArray** ptr_da = (DynamicArray**)ArbitraryArray_get_ptr(ptrtoDA,index);
-    if((*ptr_da)->buffer!=NULL){
+int DynamicArray_is_valid( const DynamicArray * da){  
+    int flag = 0;        
+     for(int i = 0; i<ArbitraryArray_size(ptrtoDA);i++){
+        DynamicArray** ptr_da = (DynamicArray**)ArbitraryArray_get_ptr(ptrtoDA,i);
+        if(*ptr_da == da){
+            if((*ptr_da)->buffer!=NULL){
+                flag = 1;
+                break;
+            }
+        }
+    }
+    if(flag){
         return 1;
     }
     return 0;
@@ -388,13 +394,13 @@ int DynamicArray_is_valid( const DynamicArray * da){          //***********Check
 
 /*! Returns the number of arrays that have been constructed to far.
  */
-int DynamicArray_num_arrays(){                        //***********Check ***********//
+int DynamicArray_num_arrays(){                        
     return count;
 }
 
 /*! Destroys all arrays that have been constructed so far.
  */
-int DynamicArray_destroy_all(){                           //***********Check ***********//
+int DynamicArray_destroy_all(){                           
     
     int i = 0;
      for (i = 0; i< ArbitraryArray_size(ptrtoDA);i++){

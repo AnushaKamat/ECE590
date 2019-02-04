@@ -138,17 +138,3 @@ void ArbitraryArray_push(ArbitraryArray * da, void * value ) {
     ArbitraryArray_set_from_ptr(da, ArbitraryArray_size(da), &value );
 }
 
-void ArbitraryArray_remove_ptr(ArbitraryArray * aa, void *da) {           //***********Check ***********//
-    assert(aa->buffer != NULL);
-    int i = 0;
-    while(i < ArbitraryArray_size(aa)){
-        DynamicArray ** ptr_da = (DynamicArray**)ArbitraryArray_get_ptr(aa,i);
-        if(da ==  (*ptr_da)){
-            ArbitraryArray_set_from_ptr(aa, i, 0);
-            printf("goes into remove if case \n");
-            break;
-        }
-        i++;
-    }
-    return;
-}
