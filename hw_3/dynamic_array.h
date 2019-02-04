@@ -97,5 +97,6 @@ int DynamicArray_destroy_all();
 /*! Returns array from the dynamic array from one index to other (including both)
  */
 DynamicArray * DynamicArray_subarray(DynamicArray *, int, int);
+int DynamicArray_search (const DynamicArray * da);
 
 #endif

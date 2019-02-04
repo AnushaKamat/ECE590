@@ -299,4 +299,24 @@ namespace {
         free(f);
         
     } 
+    TEST(DynamicArray,bigarray){
+        DynamicArray* arrays[1200];
+        for (int i = 0; i < 1200; ++i) {
+        
+        arrays[i] = DynamicArray_new();
+        }
+        
+        ASSERT_EQ(DynamicArray_num_arrays(), 1200);
+        DynamicArray_destroy(arrays[0]);
+        DynamicArray_destroy(arrays[109]);
+        DynamicArray_destroy(arrays[780]);
+        ASSERT_EQ(DynamicArray_num_arrays(), 1197);
+        DynamicArray_destroy_all();
+        ASSERT_EQ(DynamicArray_num_arrays(), 0);
+
+        for (int i =0; i < 1200; ++i) {
+        free(arrays[i]);
+        }
+    }
+        
 }

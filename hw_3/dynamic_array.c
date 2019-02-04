@@ -87,6 +87,7 @@ void DynamicArray_destroy(DynamicArray * da) {
     free(da->buffer);
     da->buffer = NULL;
     count--;  //***********Check ***********//
+
     return;
 }
 
@@ -365,14 +366,22 @@ DynamicArray * DynamicArray_take(const DynamicArray *da,const int n){
     }
     return take_da;
 }
-
+int DynamicArray_search (const DynamicArray * da){
+    int index;
+    for(int i = 0; i<ArbitraryArray_size(ptrtoDA);i++){
+        DynamicArray** ptr_da = (DynamicArray**)ArbitraryArray_get_ptr(ptrtoDA,i);
+        if(*ptr_da == da){
+            index =i;
+        }
+    }
+    return index;
+}
 int DynamicArray_is_valid( const DynamicArray * da){          //***********Check ***********//
     int i = 0;
-    for (i = 0; i< ArbitraryArray_size(ptrtoDA);i++){
-        DynamicArray** ptr_da = (DynamicArray**)ArbitraryArray_get_ptr(ptrtoDA,i);
-        if((*ptr_da)->buffer !=NULL){
-            return 1;
-        }
+    int index = DynamicArray_search(da);
+    DynamicArray** ptr_da = (DynamicArray**)ArbitraryArray_get_ptr(ptrtoDA,index);
+    if((*ptr_da)->buffer!=NULL){
+        return 1;
     }
     return 0;
 }
