@@ -8,34 +8,3 @@ Assignment 2 , Due 2nd Feb 2019
  *  Q6.	Method take that returns like matlab
  *  Q7. Method _to_string converts the elements of AA into char*  
  *  Q8. Modifying DA ADTs to keep track of all DA pointers created , valid and to be able to destroy all
-
-min
-max
-mean
-median
-sum
-last 
-front
-also modified pop and pop front 
-
-copy
-modify map to have a copy
-
-range
-
-concat
-
-_to_string for ADT
-_num_arrays
-_destroy_all
-_is_valid
-
-_num_arrays
-_destroy_all
-_is_valid
-
-
-fn running_total 
- *  Add parameter num to previously calculated sum
- *  A static variable sum is used to keep track of sum in between fn calls
-
