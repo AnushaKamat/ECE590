@@ -172,11 +172,16 @@ void TypedArray<ElementType>::pop_front() {
 template <typename ElementType>
 TypedArray<ElementType> TypedArray<ElementType>::concat(const TypedArray<ElementType>& other) {
     int s = size();
+    TypedArray concated_array;
+    for(int i=0;i<s;i++){
+       const ElementType e = this->safe_get(i);
+        concated_array.set(i, e); 
+    }
     for(int i=0;i<other.size();i++){
         const ElementType e = other.safe_get(i);
-        set(s+i, e);
+        concated_array.set(s+i, e);
     }
-    return *this;
+    return concated_array;
 }
 
 

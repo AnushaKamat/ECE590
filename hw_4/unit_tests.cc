@@ -116,18 +116,29 @@ namespace {
         TypedArray<int> a;
         a.set(0,0);
         a.set(1,1);
+        EXPECT_EQ(a.size(),2);
         TypedArray<int> b;
         b.set(0,22);
         b.set(1,11);
         TypedArray<int> c = a.concat(b).concat(a); // yields [0,1,22,11,0,1]
+        EXPECT_EQ(c.size(),6);
         EXPECT_EQ(c.get(0), 0);
         EXPECT_EQ(c.get(1), 1);  
         EXPECT_EQ(c.get(2), 22);  
         EXPECT_EQ(c.get(3), 11); 
         EXPECT_EQ(c.get(4), 0);
-        EXPECT_EQ(c.get(5), 1);    
+        EXPECT_EQ(c.get(5), 1);  
         
-
+        EXPECT_EQ(c.size(),6);  
+        TypedArray<int> d = c.concat(a);
+        
+        EXPECT_EQ(d.size(),8); 
+        EXPECT_EQ(d.get(5), 1); 
+        EXPECT_EQ(d.get(6), 0); 
+        EXPECT_EQ(d.get(7), 1); 
+        
+        EXPECT_ANY_THROW(d.safe_get(8));
+        EXPECT_EQ(d.get(78),int());
     }
     
     TEST(Imaginary, Basic){
@@ -138,6 +149,10 @@ namespace {
         EXPECT_DOUBLE_EQ(b.im(), -4.0);
         EXPECT_DOUBLE_EQ(b.re(), 3.0);
         EXPECT_DOUBLE_EQ(a.magnitude(), 5.0);
+        Imaginary c(5.0);
+        EXPECT_DOUBLE_EQ(c.re(), 5.0);
+        EXPECT_DOUBLE_EQ(c.im(), 5.0);
+        EXPECT_DOUBLE_EQ(c.magnitude(), sqrt(50.0));
     } 
 
     TEST(Imaginary, Add_assign){
@@ -188,6 +203,8 @@ namespace {
 
         EXPECT_EQ(a.get(0,0), int());
         EXPECT_ANY_THROW(a.get(0,1));
+        EXPECT_ANY_THROW(a.get(1,1));
+        EXPECT_ANY_THROW(a.get(1,0));
     }
 
     TEST(TypedMatrix, Mult_dimension){
@@ -195,8 +212,11 @@ namespace {
         EXPECT_DOUBLE_EQ(a.get(4,2), double());
         EXPECT_ANY_THROW(a.get(5,3));
         a.set(1, 1, 110.0 );
-        //std::cout<<a<<std::endl;
+        
         EXPECT_DOUBLE_EQ(a.get(1,1), 110.0);
+        EXPECT_EQ(a.get(1,0),double());
+        EXPECT_ANY_THROW(a.get(4,3));
+        EXPECT_ANY_THROW(a.get(5,2));
     }
 
     TEST(TypeMatrix, Copy){
@@ -204,11 +224,14 @@ namespace {
         a.set(1,1,3.5);
         TypedMatrix<double> b;
         b = a;
+        EXPECT_DOUBLE_EQ(b.get(1,1), 3.5);
         b.set(1,1,555);
+        EXPECT_DOUBLE_EQ(b.get(1,1), 555);
         //std::cout<<a<<std::endl;
         //std::cout<<b<<std::endl;
         EXPECT_DOUBLE_EQ(a.get(1,1), 3.5);
-        //TypedMatrix<double> c = b;
+        TypedMatrix<double> c = b;
+        EXPECT_DOUBLE_EQ(c.get(1,1), 555);
     }
    
     TEST(TypedMatrix, Add_assign){

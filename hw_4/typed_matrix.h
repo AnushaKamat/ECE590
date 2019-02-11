@@ -94,7 +94,7 @@ TypedMatrix<ElementType>& TypedMatrix<ElementType>::operator=(const TypedMatrix<
 
 template <typename ElementType>
 TypedMatrix<ElementType>& TypedMatrix<ElementType>::operator+=(const TypedMatrix<ElementType>& other){
-    if((rows!= other.rows) && (columns != other.columns)){
+    if((rows!= other.rows) || (columns != other.columns)){
         throw std::range_error("Indices do not match");
     }
     for(int i = 0 ; i < other.rows;i++){
@@ -107,7 +107,7 @@ TypedMatrix<ElementType>& TypedMatrix<ElementType>::operator+=(const TypedMatrix
 
 template <typename ElementType>
 TypedMatrix<ElementType>& TypedMatrix<ElementType>::operator*=(const TypedMatrix<ElementType>& other){
-    if((rows!= other.rows) && (columns != other.columns)){
+    if((rows!= other.rows) || (columns != other.columns)){
         throw std::range_error("Indices do not match");
     }
     for(int i = 0 ; i < other.rows;i++){
@@ -141,7 +141,7 @@ bool TypedMatrix<ElementType>::operator==(const TypedMatrix<ElementType>& other)
 
 template <typename ElementType>
 TypedMatrix<ElementType> TypedMatrix<ElementType>::operator+(const TypedMatrix<ElementType>& other){
-    if((rows!= other.rows) && (columns != other.columns)){
+    if((rows!= other.rows) || (columns != other.columns)){
         throw std::range_error("Indices do not match");
     }
     TypedMatrix<ElementType> sum(columns,rows);
