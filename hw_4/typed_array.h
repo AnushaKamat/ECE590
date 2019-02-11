@@ -148,7 +148,7 @@ void TypedArray<ElementType>::push_front(ElementType value) {
 
 template <typename ElementType>
 void TypedArray<ElementType>::pop() {
-    if (size() < 0) {
+    if (size() <= 0) {
         throw std::range_error("Negative Index");
     }
     ElementType value = buffer[index_to_offset(size())];
@@ -160,7 +160,7 @@ void TypedArray<ElementType>::pop() {
 
 template <typename ElementType>
 void TypedArray<ElementType>::pop_front() {
-    if (size() < 0) {
+    if (size() <= 0) {
         throw std::range_error("Negative Index");
     }
     ElementType value = buffer[index_to_offset(0)];

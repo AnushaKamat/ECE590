@@ -90,7 +90,11 @@ namespace {
         EXPECT_EQ(a.size(),2);
         a.push(12.0);
         EXPECT_EQ(a.size(),3);
-        EXPECT_DOUBLE_EQ(a.get(2), 12.0);   
+        EXPECT_DOUBLE_EQ(a.get(2), 12.0); 
+        a.pop();
+        a.pop();
+        a.pop();  
+        EXPECT_ANY_THROW(a.pop());
         
     }
 
@@ -101,7 +105,11 @@ namespace {
         EXPECT_EQ(a.get(0), 5);
         a.pop_front();
         a.push_front(11);
-        EXPECT_EQ(a.get(0), 11);   
+        EXPECT_EQ(a.get(0), 11); 
+        a.pop_front();
+        a.pop_front();
+        EXPECT_ANY_THROW(a.pop_front());
+
     }
 
     TEST(TypedArray, Concat){
@@ -118,6 +126,8 @@ namespace {
         EXPECT_EQ(c.get(3), 11); 
         EXPECT_EQ(c.get(4), 0);
         EXPECT_EQ(c.get(5), 1);    
+        
+
     }
     
     TEST(Imaginary, Basic){
