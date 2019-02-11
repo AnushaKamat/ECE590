@@ -28,8 +28,8 @@ public:
     void push_front(ElementType value);
 
     //Pop
-    ElementType pop();
-    ElementType pop_front();
+    void pop();
+    void pop_front();
     
     // Setters
     void set(int index, ElementType value);
@@ -97,7 +97,7 @@ ElementType &TypedArray<ElementType>::get(int index) {
         throw std::range_error("Out of range index in array");
     }
     if ( index >= size() ) {
-        ElementType x;
+        ElementType x = ElementType();
         set(index, x);
     } 
     return buffer[index_to_offset(index)];
@@ -134,42 +134,39 @@ void TypedArray<ElementType>::set(int index, ElementType value) {
 
 template <typename ElementType>
 void TypedArray<ElementType>::push(ElementType value) {
-    /* while(out_of_buffer(index_to_offset(size()))){
-        extend_buffer();
-    }*/
     set(size(),value);
 }
 
 template <typename ElementType>
 void TypedArray<ElementType>::push_front(ElementType value) {
-    /*while(out_of_buffer(index_to_offset(origin))){
+    if (origin == 0)  {
         extend_buffer();
-    }*/
+    }
     origin--;
     set(0,value);
 }
 
 template <typename ElementType>
-ElementType TypedArray<ElementType>::pop() {
+void TypedArray<ElementType>::pop() {
     if (size() < 0) {
         throw std::range_error("Negative Index");
     }
     ElementType value = buffer[index_to_offset(size())];
     end--;
-    return value;
+    return ;
 
    
 }
 
 template <typename ElementType>
-ElementType TypedArray<ElementType>::pop_front() {
+void TypedArray<ElementType>::pop_front() {
     if (size() < 0) {
         throw std::range_error("Negative Index");
     }
     ElementType value = buffer[index_to_offset(0)];
     
     origin++;
-    return value;
+    return ;
 }
 
 template <typename ElementType>

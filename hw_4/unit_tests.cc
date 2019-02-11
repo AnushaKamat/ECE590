@@ -22,32 +22,62 @@ namespace {
 
     TEST(TypedArray, Push) {
         TypedArray<int> a;
+        EXPECT_EQ(a.size(),0);
         a.push(1);
+        EXPECT_EQ(a.size(),1);
         a.push(3);
         a.push(5);
         a.push(7);
         a.push(9);
+        EXPECT_EQ(a.size(),5);
         EXPECT_EQ(a.get(0), 1);
         EXPECT_EQ(a.get(1), 3);
         EXPECT_EQ(a.get(2), 5);
         EXPECT_EQ(a.get(3), 7);
         EXPECT_EQ(a.get(4), 9);
-        //EXPECT_EQ(a.get(7),0);
+        EXPECT_EQ(a.get(7),0);
+        EXPECT_ANY_THROW(a.get(-1));
     }
     
     TEST(TypedArray, Push_front){
         TypedArray<double> a;
         a.push_front(2.0);
+        EXPECT_EQ(a.size(),1);
         a.push_front(4.0);
         a.push_front(6.0);
         a.push_front(8.0);
         a.push_front(10.0);
+        EXPECT_EQ(a.size(),5);
         EXPECT_DOUBLE_EQ(a.get(0), 10.0);
         EXPECT_DOUBLE_EQ(a.get(1), 8.0);
         EXPECT_DOUBLE_EQ(a.get(2), 6.0);
         EXPECT_DOUBLE_EQ(a.get(3), 4.0);
         EXPECT_DOUBLE_EQ(a.get(4), 2.0);
     }
+     TEST(TypedArray, Big_Push){
+        TypedArray<double> a;
+        for(int i = 0 ; i< 35; i++){
+            a.push(i);
+            EXPECT_EQ(a.size(),i+1);
+
+        }
+        for(int i = 0 ; i< 35; i++){
+            EXPECT_EQ(a.get(i),i);
+            
+        }
+        
+    }
+     TEST(TypedArray, Big_Push_front){
+        TypedArray<double> a;
+        for(int i = 0 ; i< 35; i++){
+            a.push_front(i);
+            EXPECT_EQ(a.size(),i+1);
+        }
+        for(int i = 34 ; i>=0; i--){
+            EXPECT_EQ(a.get(34-i),i);  
+        }    
+    }
+
 
     TEST(TypeArray, Pop){
         TypedArray<double> a;

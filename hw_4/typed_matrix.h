@@ -67,7 +67,7 @@ int TypedMatrix<ElementType>::numcolumns()const{
 
 template <typename ElementType>
 ElementType& TypedMatrix<ElementType>::get(int i, int j) const {
-    if(i< 0 && i>rows || j<0 && j>columns){
+    if(i< 0 || i>rows || j<0 || j>columns){
         throw std::range_error("Out of range index in array");
     }
     return matrix.safe_get(i).safe_get(j);
