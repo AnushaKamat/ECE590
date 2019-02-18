@@ -479,7 +479,7 @@ TEST(Question4, write_matrix_csv) {
     TypedMatrix<double> m = TypedMatrix<double>(2,4);
     m.set(0,0,4.5);
     m.set(0,1,5.555);
-    write_matrix_csv(m, "out1.csv");
+    write_matrix_csv(m, "input/out1.csv");
 }
 
 TEST(Question4, write_and_then_read_matrix_csv) {
