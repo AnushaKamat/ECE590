@@ -2,12 +2,13 @@
 
 vector<double> sort_by_magnitude(vector<double> &v) {
     //Adding exception if there are no values
+    
     if(v.size() <= 0){
-        throw std::invalid_argument("Vector is empty");
+        return v;
     }
 
     vector<double> vout(v.begin(),v.end());
-    std::sort(vout.begin(),vout.end(),[](double i, double j){return (abs(i)) < (abs(j));});
+    std::sort(vout.begin(),vout.end(),[](double i, double j){return (fabs(i)) < (fabs(j));});
     return vout;
 }
 
