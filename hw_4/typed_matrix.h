@@ -88,6 +88,8 @@ TypedMatrix<ElementType>& TypedMatrix<ElementType>::operator=(const TypedMatrix<
                 this->set(i,j,other.get(i,j));
             }
         }
+        this->rows = other.rows;
+        this->columns = other.columns;
     }
     return *this;
 }
@@ -169,6 +171,8 @@ TypedMatrix<ElementType> TypedMatrix<ElementType>::operator*(const TypedMatrix<E
 
         }
     }
+    product.rows_ = this->rows_;
+    product.cols_ = other.cols_;
     return product;
 }
 
