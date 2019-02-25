@@ -23,7 +23,7 @@ namespace random_filter {
         void start() {}
         void update() {
             r = (double)rand()/RAND_MAX;
-            std::cout << "send:" << r << std::endl;
+            //std::cout << "send:" << r << std::endl;
             channel("link").send(r);
         }
         void stop() {}
@@ -40,27 +40,22 @@ namespace random_filter {
             w = weight;
         }
         void init() {
-            filtered_val =0.0;
-            loop_max_count =0;
-            
+            filtered_val =0.0;  
         }
         void start() {
             filtered_val = 0.0;
+            channel("link").flush(1);
         }
         void update() {
-            
-            if(channel("link").size() >= w.size()){
-                loop_max_count = w.size();
+            //std::cout <<"Channel width : " << channel("link").size() << "\n";
+            if(w.size() <= 0){
+                throw std::range_error("No filter parameters provided."); 
             }
-            else{
-                loop_max_count = channel("link").size();
+            if(channel("link").size() <= w.size()){
+                double x = channel("link").latest();
+                filtered_val +=x*w[channel("link").size()-1];
             }
-            for(int i =0; i < loop_max_count; i++) {
-                double x = channel("link").pop_earliest();
-                //std::cout <<"Channel output " << "_" << i << ":" << x <<"\n";
-                filtered_val +=x*w[i];
-            } 
-           // std::cout << "filtered:" << filtered_val << std::endl;
+            //std::cout << "filtered:" << filtered_val << std::endl;
         }
         inline double value() { return filtered_val; }
         void stop() {}
@@ -68,7 +63,6 @@ namespace random_filter {
       private:
         // add any private variable you need here
         double filtered_val;
-        int loop_max_count;
         vector<double> w;
     };
 }

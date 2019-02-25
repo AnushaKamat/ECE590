@@ -4,9 +4,9 @@
 #define STOPWATCH_H
 
 #include <chrono>
-
+#include <stdexcept>
 using namespace std::chrono;
-typedef enum { INIT, STARTED, STOPPED } statusType;
+typedef enum { INIT, STARTED, STOPPED, RESET } statusType;
 class Stopwatch{
     public:
         Stopwatch();
@@ -19,11 +19,11 @@ class Stopwatch{
         double get_seconds();      // number of seconds counted
         double get_milliseconds(); // number of milliseconds counted
         double get_nanoseconds();  // number of nanoseconds counted
-        statusType st;
+        inline int status() {return st;}
     private:
        high_resolution_clock::time_point _start,_stop;
        high_resolution_clock::duration _dur; // declare any private variable you need here, we won't access them since they are private
-       
+       statusType st;
        
 };
 
