@@ -224,11 +224,47 @@ TEST(STOPWATCH, BASIC5){
     EXPECT_NEAR(watch.seconds(), 0.0, tolerance);
     m.emit(Event("stop"));
             
-    EXPECT_NEAR(watch.seconds(), 0.5, tolerance);
+    EXPECT_NEAR(watch.seconds(), 0.0, tolerance);
 
 } 
+    TEST(STOPWATCH, STOP){
+        Manager m;
+        Stopwatch watch = Stopwatch();
+        m.schedule(watch, 10_ms)
+        .init()
+        .start();
 
+        m.emit(Event("start"));
 
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        m.emit(Event("stop"));
+        m.emit(Event("stop"));
+        m.emit(Event("start"));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        m.emit(Event("stop"));
+        EXPECT_NEAR(watch.seconds(), 0.2, tolerance);
+         
+    }
+    
+    TEST(STOPWATCH, START){
+        Manager m;
+        Stopwatch watch = Stopwatch();
+        m.schedule(watch, 10_ms)
+        .init()
+        .start();
+
+        m.emit(Event("start"));
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        m.emit(Event("stop"));
+        m.emit(Event("start"));
+        m.emit(Event("start"));
+        m.emit(Event("start"));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        m.emit(Event("stop"));
+        EXPECT_NEAR(watch.seconds(), 0.3, tolerance);
+ 
+    }
 /*!!
  * Here we use your Robot class to give the robot
  * a little trial and see what state its in.

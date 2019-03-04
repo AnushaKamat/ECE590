@@ -20,13 +20,13 @@ class Stopwatch : public elma::Process {
         
         double seconds();
         inline int status() {return st;}
-        typedef enum { INIT, STARTED, STOPPED, RESET } statusType;
+        typedef enum { STARTED, STOPPED } statusType;
 
     private:
-    high_resolution_clock::time_point _start,_stop;
+    high_resolution_clock::time_point _start;
     high_resolution_clock::duration _dur; 
     statusType st;
-    int reset_flag;
+    
 };
 
 #endif
