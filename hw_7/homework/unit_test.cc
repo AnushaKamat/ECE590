@@ -9,10 +9,39 @@
 using namespace std::chrono;
 using namespace elma;
 
-double tolerance = 0.02;
+double tolerance = 0.01;
 /*!!
  * Here we use your StopWatch class to time something.
  */
+
+
+class testClass : public Process {
+
+    public:
+    testClass() : Process("testclass") {}
+    void init() {
+        watch("a", [this](Event& e) {
+            std::cout << "I am in AA" <<std::endl;
+        },1);
+        watch("a", [this](Event& e) {
+            std::cout << "I am in AD" <<std::endl;
+        });
+        watch("a", [this](Event &e) {
+            std::cout << "I am in AB" <<std::endl;
+        },0);
+        watch("b", [this](Event &e) {
+            std::cout << "I am in BB" <<std::endl;
+        },2);
+        watch("a", [this](Event& e) {
+            std::cout << "I am in AC" <<std::endl;
+        },6);        
+    }
+    void start() {}
+    void update() {}
+    void stop() {}
+};
+
+
 
 TEST(Question1, StopWatch) {
     Manager m;
@@ -23,28 +52,23 @@ TEST(Question1, StopWatch) {
     .init()
     .start();
 
-    std::cout << watch.seconds() << std::endl;
-
     m.emit(Event("start"));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 0.5, tolerance);
 
-    std::cout << watch.seconds() << std::endl;
-
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 1.0, tolerance);
-
-    std::cout << watch.seconds() << std::endl;
 
     m.emit(Event("stop"));
 
 } 
-    TEST(STOPWATCH, BASIC1){
+    
+TEST(STOPWATCH, BASIC1){
 
-        Manager m;
+    Manager m;
 
     Stopwatch watch = Stopwatch();
 
@@ -52,48 +76,36 @@ TEST(Question1, StopWatch) {
     .init()
     .start();
 
-    std::cout << watch.seconds() << std::endl;
-
     m.emit(Event("start"));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 0.5, tolerance);
 
-    std::cout << watch.seconds() << std::endl;
-
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 1.0, tolerance);
 
-    std::cout << watch.seconds() << std::endl;
-
     m.emit(Event("stop"));
 
-     m.emit(Event("start"));
+    m.emit(Event("start"));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 1.5, tolerance);
 
-    std::cout << watch.seconds() << std::endl;
-
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 2.0, tolerance);
 
-    std::cout << watch.seconds() << std::endl;
-
-    m.emit(Event("stop"));
-
-        
-    }  
+    m.emit(Event("stop"));    
+}  
     
-        TEST(STOPWATCH, BASIC2){
 
+   
+TEST(STOPWATCH, BASIC2){
 
-
-         Manager m;
+    Manager m;
 
     Stopwatch watch = Stopwatch();
 
@@ -101,72 +113,56 @@ TEST(Question1, StopWatch) {
     .init()
     .start();
 
-    std::cout << watch.seconds() << std::endl;
-    std::cout << "STRAT emitted" <<std::endl;
     m.emit(Event("start"));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 0.5, tolerance);
 
-    std::cout << watch.seconds() << std::endl;
-
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 1.0, tolerance);
 
-    std::cout << watch.seconds() << std::endl;
-
     m.emit(Event("stop"));
     
-std::this_thread::sleep_for(std::chrono::milliseconds(500));
-EXPECT_NEAR(watch.seconds(), 1.0, tolerance);
-     m.emit(Event("start"));
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    EXPECT_NEAR(watch.seconds(), 1.0, tolerance);
+    m.emit(Event("start"));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 1.5, tolerance);
 
-    std::cout << watch.seconds() << std::endl;
-
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 2.0, tolerance);
 
-    std::cout << watch.seconds() << std::endl;
-
     m.emit(Event("stop"));
     
-std::this_thread::sleep_for(std::chrono::milliseconds(500));
-m.emit(Event("reset"));
-std::this_thread::sleep_for(std::chrono::milliseconds(500));
-std::cout <<"After reset must be zero : "<< watch.seconds() << std::endl;
-m.emit(Event("start"));
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    m.emit(Event("reset"));
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    m.emit(Event("start"));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 0.5, tolerance);
 
-    std::cout << "starting after rest : " <<watch.seconds() << std::endl;
-
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 1.0, tolerance);
-
-    std::cout << watch.seconds() << std::endl;
 
     m.emit(Event("stop"));
             
     EXPECT_NEAR(watch.seconds(), 1.0, tolerance);
 
     } 
-    //what should happen if start is called after start or stop is called after reset ?
+
     
-    TEST(STOPWATCH, BASIC3){
-
-
-
-         Manager m;
+   
+TEST(STOPWATCH, BASIC3){
+    
+    Manager m;
 
     Stopwatch watch = Stopwatch();
 
@@ -174,29 +170,23 @@ m.emit(Event("start"));
     .init()
     .start();
 
-    std::cout << watch.seconds() << std::endl;
-
-m.emit(Event("reset"));
-std::cout << watch.seconds() << std::endl;
-std::this_thread::sleep_for(std::chrono::milliseconds(500));
-std::cout <<"After reset must be zero : "<< watch.seconds() << std::endl;
-m.emit(Event("start"));
+    m.emit(Event("reset"));
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    m.emit(Event("start"));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 0.5, tolerance);
 
-
     m.emit(Event("stop"));
             
     EXPECT_NEAR(watch.seconds(), 0.5, tolerance);
 
-    } 
-    TEST(STOPWATCH, BASIC4){
+} 
+    
+TEST(STOPWATCH, BASIC4){
 
-
-
-         Manager m;
+    Manager m;
 
     Stopwatch watch = Stopwatch();
 
@@ -204,9 +194,7 @@ m.emit(Event("start"));
     .init()
     .start();
 
-    std::cout << watch.seconds() << std::endl;
-
-m.emit(Event("start"));
+    m.emit(Event("start"));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
@@ -217,14 +205,11 @@ m.emit(Event("start"));
     m.emit(Event("stop"));
             
     EXPECT_NEAR(watch.seconds(), 0.0, tolerance);
-
-    } 
+} 
     
-     TEST(STOPWATCH, BASIC5){
+TEST(STOPWATCH, BASIC5){
 
-
-
-         Manager m;
+    Manager m;
 
     Stopwatch watch = Stopwatch();
 
@@ -232,23 +217,16 @@ m.emit(Event("start"));
     .init()
     .start();
 
-    std::cout << watch.seconds() << std::endl;
-
-m.emit(Event("reset"));
+    m.emit(Event("reset"));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     EXPECT_NEAR(watch.seconds(), 0.0, tolerance);
-    //m.emit(Event("start"));
-    //EXPECT_NEAR(watch.seconds(), 0.5, tolerance);
-
     m.emit(Event("stop"));
             
     EXPECT_NEAR(watch.seconds(), 0.5, tolerance);
 
-    
-
-    } 
+} 
 
 
 /*!!
@@ -282,26 +260,21 @@ TEST(Question2, RobotEnvironment1) {
      * Send signals to robot and test
      */
     
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), wander.c_str());
 
     m.emit(Event("intruder detected"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), noise.c_str());
 
     m.emit(Event("proximity warning"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), evade.c_str());
 
     m.emit(Event("battery full"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), evade.c_str());
 }
-
 TEST(Question2, RobotEnvironment2) {
 
     // create a new robot
-    Robot robot = Robot("What a very nice robot");
+    Robot robot = Robot("fully travelled robot");
     // Robot robot = Robot(); // << this should also work
 
     // init manager
@@ -322,40 +295,33 @@ TEST(Question2, RobotEnvironment2) {
     /*
      * Send signals to robot and test
      */
-    
-    std::cout << robot.current().name() << std::endl;
+   
     EXPECT_EQ(robot.current().name(), wander.c_str());
 
     m.emit(Event("battery low"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), findRS.c_str());
 
     m.emit(Event("found recharge station"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), rec.c_str());
 
     m.emit(Event("battery full"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), wander.c_str());
 
     m.emit(Event("intruder detected"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), noise.c_str());
 
-     m.emit(Event("proximity warning"));
-    std::cout << robot.current().name() << std::endl;
+    m.emit(Event("proximity warning"));
     EXPECT_EQ(robot.current().name(), evade.c_str());
 
     m.emit(Event("battery low"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), findRS.c_str());
 }
 
 TEST(Question2, RobotEnvironment3) {
 
     // create a new robot
-    Robot robot = Robot("What a very nice robot");
-    // Robot robot = Robot(); // << this should also work
+    //Robot robot = Robot("What a very nice robot");
+    Robot robot = Robot(); // << this should also work
 
     // init manager
     Manager m;
@@ -364,50 +330,41 @@ TEST(Question2, RobotEnvironment3) {
     .init()
     .start()
     .emit(Event("start"));
-
-
     string wander = "Wander";
     string noise = "Make Noise";
     string evade = "Evade";
     string findRS = "Find Recharge Station";
     string rec="Recharge";
-
+    
     /*
      * Send signals to robot and test
      */
-    
-    std::cout << robot.current().name() << std::endl;
+  
     EXPECT_EQ(robot.current().name(), wander.c_str());
 
     m.emit(Event("battery low"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), findRS.c_str());
 
     m.emit(Event("found recharge station"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), rec.c_str());
 
     m.emit(Event("battery full"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), wander.c_str());
 
     m.emit(Event("intruder detected"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), noise.c_str());
 
-     m.emit(Event("proximity warning"));
-    std::cout << robot.current().name() << std::endl;
+    m.emit(Event("proximity warning"));
     EXPECT_EQ(robot.current().name(), evade.c_str());
 
     m.emit(Event("reset"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), noise.c_str());
 }
 
 TEST(Question2, RobotEnvironment4) {
 
     // create a new robot
-    Robot robot = Robot("What a very nice robot");
+    Robot robot = Robot("Dude robot");
     // Robot robot = Robot(); // << this should also work
 
     // init manager
@@ -428,12 +385,10 @@ TEST(Question2, RobotEnvironment4) {
     /*
      * Send signals to robot and test
      */
-    
-    std::cout << robot.current().name() << std::endl;
+
     EXPECT_EQ(robot.current().name(), wander.c_str());
 
     m.emit(Event("stop"));
-    std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), wander.c_str());
 }
 TEST(Question2, RobotEnvironment5) {
@@ -456,13 +411,12 @@ TEST(Question2, RobotEnvironment5) {
     string evade = "Evade";
     string findRS = "Find Recharge Station";
     string rec="Recharge";
-std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), wander.c_str());
 
-     m.emit(Event("proximity warning"));
-    std::cout << robot.current().name() << std::endl;
+    m.emit(Event("proximity warning"));
     EXPECT_EQ(robot.current().name(), wander.c_str());
 }
+
 TEST(Question2, RobotEnvironment6) {
 
     // create a new robot
@@ -483,28 +437,30 @@ TEST(Question2, RobotEnvironment6) {
     string evade = "Evade";
     string findRS = "Find Recharge Station";
     string rec="Recharge";
-std::cout << robot.current().name() << std::endl;
     EXPECT_EQ(robot.current().name(), wander.c_str());
     m.emit(Event("reset"));
-    std::cout << robot.current().name() << std::endl;
-   //StateMachine mvm = StateMachine("mnt");
-   
-    //robot.to_json();
-   
-   //std::cout << "state machine  is :\n" << exmpl.dump(3) <<std::endl;
-   std::cout << "\n\n state machine  is :\n" << robot.to_json().dump(4) <<std::endl;
-    //std::cout << "robot.to_json[name]" << robot.to_json()[0];
 }
 /*!!
  * Here we will create various StateMachines and validate the JSON from the to_json method.
  */
 
-//TEST(Question3, to_json) {
+TEST(Question3, to_json) {
     /*
      * coming soon... but this is straight-forward to test. At this point, you shouldn't
      * need help writing tests for this one.
      */
-//}
+    Robot robot = Robot("What a very nice robot");
+    // Robot robot = Robot(); // << this should also work
+
+    // init manager
+    Manager m;
+    
+    m.schedule(robot, 10_ms)
+    .init()
+    .start()
+    .emit(Event("start"));
+    std::cout << "\n\n state machine  is :\n" << robot.to_json().dump(4) <<std::endl;
+}
 
 /*!!
  * Here we will test priority of watching events. Events with higher priority should always be
@@ -512,8 +468,105 @@ std::cout << robot.current().name() << std::endl;
  *
  * Test variants will include testing various events of lower and higher priority.
  */
-/*TEST(Question4, WatchPriority) {
+
+TEST(Question4, WatchPriority) {
     /*
      * coming soon...
      */
-//}
+    testClass tC;
+    Manager m;
+
+    m.schedule(tC, 10_ms)
+      .init();
+
+    m.start();
+    m.emit(Event("b"));
+    m.emit(Event("a"));
+}
+/*Test case provided by Anup on Discussion Board*/
+TEST(Question4, WatchPriority2) {
+
+ Manager m;
+
+ vector<int> marbles;
+
+ Stopwatch watch = Stopwatch();
+
+ m.schedule(watch, 10_ms)
+
+ .init();
+
+ watch.watch("garble", [&] (Event&) {
+
+ 
+ marbles.push_back(1);
+
+ }, 1);
+
+ watch.watch("garble", [&] (Event&) {
+
+
+
+ marbles.push_back(10);
+
+ }, 10);
+
+ watch.watch("garble", [&] (Event&) {
+
+
+
+ marbles.push_back(5);
+
+ }, 5);
+
+ watch.watch("garble", [&] (Event&) {
+
+
+
+ marbles.push_back(0);
+
+ }, 0);
+
+ watch.watch("garble", [&] (Event&) {
+
+
+
+ marbles.push_back(10);
+
+ }, 10);
+
+ watch.watch("garble", [&] (Event&) {
+
+
+
+ marbles.push_back(1);
+
+ }, 1);
+
+ watch.watch("garble", [&] (Event&) {
+
+
+
+ marbles.push_back(0);
+
+ });
+
+ m.emit(Event("garble"));
+
+ EXPECT_EQ(marbles.size(), 7);
+
+ EXPECT_EQ(marbles.at(0), 10);
+
+ EXPECT_EQ(marbles.at(1), 10);
+
+ EXPECT_EQ(marbles.at(2), 5);
+
+ EXPECT_EQ(marbles.at(3), 1);
+
+ EXPECT_EQ(marbles.at(4), 1);
+
+ EXPECT_EQ(marbles.at(5), 0);
+
+ EXPECT_EQ(marbles.at(6), 0);
+
+}

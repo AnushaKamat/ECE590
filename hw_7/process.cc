@@ -16,11 +16,11 @@ namespace elma {
         }
     }
 
-    void Process::watch(string event_name, std::function<void(Event&)> handler) {
+    void Process::watch(string event_name, std::function<void(Event&)> handler,int priority) {
         if ( _manager_ptr == NULL ) {
             throw Exception("Cannot access events in a process before the process is scheduled.");
         } else {        
-            _manager_ptr->watch(event_name, handler);
+            _manager_ptr->watch(event_name, handler, priority);
         }
     }
 

@@ -47,8 +47,6 @@ namespace elma {
     void StateMachine::stop() {}
 
     json StateMachine::to_json(){
-        std::cout << "trans 0" << _transitions[0].event_name();
-        std::cout << "transitions size ," <<_transitions.size();
         json transitions = {};
         std::set<string> states;
         for(int i = 0; i < _transitions.size();i++){

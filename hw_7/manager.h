@@ -53,13 +53,13 @@ namespace elma {
         Channel& channel(string);
 
         // Event Interface
-        Manager& watch(string event_name, std::function<void(Event&)> handler);
+        Manager& watch(string event_name, std::function<void(Event&)> handler,int priority =0);
         Manager& emit(const Event& event);
 
         private:
         vector<Process *> _processes;
         map<string, Channel *> _channels;
-        map<string, vector<std::function<void(Event&)>>> event_handlers;
+        map<string, map<int, vector<std::function<void(Event&)>>>> event_handlers;
         high_resolution_clock::time_point _start_time;
         high_resolution_clock::duration _elapsed;
 

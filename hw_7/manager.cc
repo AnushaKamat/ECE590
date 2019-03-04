@@ -48,8 +48,8 @@ namespace elma {
     //! @endcode
     //! \param event_name The name of the event
     //! \handler A function or lambda that takes an event and returns nothing.
-    Manager& Manager::watch(std::string event_name, std::function<void(Event&)> handler) {
-        event_handlers[event_name].push_back(handler);
+    Manager& Manager::watch(std::string event_name, std::function<void(Event&)> handler, int priority) {
+        event_handlers[event_name][priority].push_back(handler);
         return *this;
     }
 
@@ -68,9 +68,15 @@ namespace elma {
     Manager& Manager::emit(const Event& event) {
         Event e = event; // make a copy so we can change propagation
         if ( event_handlers.find(event.name()) != event_handlers.end() ) {
-            for ( auto handler : event_handlers[event.name()] ) {
-                if ( e.propagate() ) {
-                  handler(e);
+            auto handler_map = event_handlers[event.name()];
+            for (auto it = handler_map.rbegin(); it!= handler_map.rend(); it++) {
+                auto priority = it->first;
+                auto inner_vector = it->second;
+                for (auto it2 = inner_vector.begin(); it2 != inner_vector.end(); it2++) {
+                    auto handler = *it2;
+                    if ( e.propagate() ) {
+                        handler(e);
+                    }
                 }
             }
         }

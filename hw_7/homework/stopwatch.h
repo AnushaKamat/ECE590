@@ -14,9 +14,9 @@ class Stopwatch : public elma::Process {
     public: 
         Stopwatch():Process("stopwatch"){}
         void init();
-        void start();
-        void update();
-        void stop();
+        void start(){}
+        void update(){}
+        void stop(){}
         
         double seconds();
         inline int status() {return st;}

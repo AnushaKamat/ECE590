@@ -15,7 +15,6 @@ class RobotState : public State {
      * the 'State' constructors.
      */
     public:
-
         //! Construct an unnamed State
         RobotState():State() {}
         //! Construct a state with the given name
@@ -52,40 +51,56 @@ public:
      * "intruder detected"
      * "proximity warning"
      */
-        Robot():StateMachine() {
-            Robot robot = Robot("Robot name unknown");
-        }
-        //! Construct a state with the given name
-        Robot(std::string name):StateMachine(name) {
-            idle = RobotState("Idle");
-            recharge =  RobotState("Recharge");
-            wander =  RobotState("Wander");
-            findRechargeStation =  RobotState("Find Recharge Station");
-            evade =  RobotState("Evade");
-            makeNoise =  RobotState("Make Noise");
-            this
-                ->set_initial(idle)
-                .add_transition("start", idle, wander)
-                .add_transition("battery low", wander, findRechargeStation)
-                .add_transition("found recharge station", findRechargeStation, recharge)
-
-                .add_transition("battery full", recharge, wander)
-                .add_transition("reset", makeNoise, wander)
-
-                .add_transition("intruder detected", wander, makeNoise)
-                .add_transition("proximity warning", makeNoise, evade)
-                .add_transition("reset", evade, makeNoise)
-                .add_transition("battery low", evade, findRechargeStation);
-
-        }
+    Robot():StateMachine("Robot name unknown") {
+            
+        idle = RobotState("Idle");
+        recharge =  RobotState("Recharge");
+        wander =  RobotState("Wander");
+        findRechargeStation =  RobotState("Find Recharge Station");
+        evade =  RobotState("Evade");
+        makeNoise =  RobotState("Make Noise");
         
+        this
+            ->set_initial(idle)
+            .add_transition("start", idle, wander)
+            .add_transition("battery low", wander, findRechargeStation)
+            .add_transition("found recharge station", findRechargeStation, recharge)
 
+            .add_transition("battery full", recharge, wander)
+            .add_transition("reset", makeNoise, wander)
 
+            .add_transition("intruder detected", wander, makeNoise)
+            .add_transition("proximity warning", makeNoise, evade)
+            .add_transition("reset", evade, makeNoise)
+            .add_transition("battery low", evade, findRechargeStation);
 
+            
+    }
+        //! Construct a state with the given name
+    Robot(std::string name):StateMachine(name) {
+        
+        idle = RobotState("Idle");
+        recharge =  RobotState("Recharge");
+        wander =  RobotState("Wander");
+        findRechargeStation =  RobotState("Find Recharge Station");
+        evade =  RobotState("Evade");
+        makeNoise =  RobotState("Make Noise");
+        
+        this
+            ->set_initial(idle)
+            .add_transition("start", idle, wander)
+            .add_transition("battery low", wander, findRechargeStation)
+            .add_transition("found recharge station", findRechargeStation, recharge)
 
+            .add_transition("battery full", recharge, wander)
+            .add_transition("reset", makeNoise, wander)
 
-
-
+            .add_transition("intruder detected", wander, makeNoise)
+            .add_transition("proximity warning", makeNoise, evade)
+            .add_transition("reset", evade, makeNoise)
+            .add_transition("battery low", evade, findRechargeStation);
+    }
+        
 private:
     /*
      * Hint: You may want to keep RobotState here since locally declared variables are destroyed
