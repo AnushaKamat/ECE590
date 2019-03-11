@@ -1,73 +1,46 @@
-// Backbone code for HW6_Question1
 #include "stopwatch.h"
 #include <iostream>
 
-Stopwatch::Stopwatch(){
-    // TODO
-    _start = high_resolution_clock::now();
-    _stop = _start;
-    _dur = high_resolution_clock::duration::zero();//.count(); 
-    this->st = INIT;
-}
-
 void Stopwatch::start(){
-    // TODO
-    //std::cout <<"Inside start: "<<status()<<std::endl;
-    if(status() == 1){
-        throw std::invalid_argument("Cannot again start as Stopwatch is already started") ;
+    if(_status==STOPPED){
+        _start_time = high_resolution_clock::now();
+        _status = RUNNING;
     }
-    _start = high_resolution_clock::now();
-    _stop = _start;
-    this->st = STARTED;
 }
 
 void Stopwatch::stop(){
-    // TODO
-    //std::cout <<"Inside : "<<status()<<std::endl;
-    if(!(status() == 1 || status() == 3)){
-        throw std::invalid_argument("Cannot stop a Stopwatch when not started") ;
+    if(_status==RUNNING){
+        _elapsed += high_resolution_clock::now() - _start_time;
+        _status = STOPPED;
     }
-    _stop = high_resolution_clock::now();
-    _dur += (_stop-_start); //duration in ns
-    this->st=STOPPED;
-    //std::cout << _dur.count();
 }
 
 void Stopwatch::reset(){
-    if(!(status() == 2)){
-        throw std::invalid_argument("Cannot reset a Stopwatch when not stopped") ;
-    }
-    _start = high_resolution_clock::now();
-    _stop = _start;
-    _dur = high_resolution_clock::duration::zero();
-    this->st = RESET;
+    _elapsed = high_resolution_clock::duration::zero();
+    _status = STOPPED;
 }
 
 double Stopwatch::get_minutes(){
-    if(status() != 2){
-        throw std::invalid_argument("Cannot provide time if Stopwatch is not stopped") ;
-    }
-    duration<double,std::ratio<60>> t = _dur;
-    return t.count();   
+    if(_status==RUNNING)
+        return minutes_type(_elapsed + high_resolution_clock::now() - _start_time).count();
+    else
+        return minutes_type(_elapsed).count();
 }
 double Stopwatch::get_seconds(){
-    if(status() != 2){
-        throw std::invalid_argument("Cannot provide time if Stopwatch is not stopped") ;
-    }
-    duration<double,std::ratio<1,1>> t = _dur;
-    return t.count();
+    if(_status==RUNNING)
+        return minutes_type(_elapsed + high_resolution_clock::now() - _start_time).count();
+    else
+        return seconds_type(_elapsed).count();
 }
 double Stopwatch::get_milliseconds(){
-    if(status() != 2){
-        throw std::invalid_argument("Cannot provide time if Stopwatch is not stopped") ;
-    }
-    duration<double,std::milli> t = _dur;
-    return t.count();
+    if(_status==RUNNING)
+        return minutes_type(_elapsed + high_resolution_clock::now() - _start_time).count();
+    else
+        return milliseconds_type(_elapsed).count();
 }
 double Stopwatch::get_nanoseconds(){
-    if(status() != 2){
-        throw std::invalid_argument("Cannot provide time if Stopwatch is not stopped") ;
-    }
-    return _dur.count();
+    if(_status==RUNNING)
+        return minutes_type(_elapsed + high_resolution_clock::now() - _start_time).count();
+    else
+        return nanoseconds_type(_elapsed).count();
 }
-

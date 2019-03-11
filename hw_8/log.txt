@@ -1,0 +1,11 @@
+Got new save request {"temperature":93.25159722066093,"x":0,"y":0}
+Got find request for id = 0
+Got new save request {"temperature":71.52015560470528,"x":-1,"y":4}
+Got find request for id = 1
+Got new save request {"temperature":53.861964612203636,"x":1,"y":3}
+Got find request for id = 2
+Got new save request {"temperature":78.52930091998041,"x":3,"y":4}
+Got find request for id = 3
+Got new save request {"temperature":32.133398123147614,"x":0,"y":4}
+Got find request for id = 4
+Got new save request {"temperature":40.055505998458486,"x":0,"y":0}

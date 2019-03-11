@@ -1,5 +1,3 @@
-// Backbone code for HW6_Question4
-
 #ifndef RANDOM_FILTER_H
 #define RANDOM_FILTER_H
 
@@ -12,58 +10,53 @@
 
 using std::string;
 using std::vector;
-using std::rand;
 
 namespace random_filter {
     class Random : public elma::Process {
       public: 
-        // you may initialize other private data in constructor
-        Random(string name) : Process(name) {}
+        Random(string name) : Process(name), _idx(0.0) {}
         void init() {}
         void start() {}
         void update() {
-            r = (double)rand()/RAND_MAX;
-            //std::cout << "send:" << r << std::endl;
-            channel("link").send(r);
+            double val = (double)rand() / RAND_MAX;
+            channel("link").send(val);
+            std::cout<<"send: "<<val<<"\n";
         }
         void stop() {}
       private:
-        // add any private variable you need here
-        double r;
+        int _idx;
     };
 
 
     class Filter : public elma::Process {
       public: 
-        // you may initialize other private data in constructor
-        Filter(std::string name, vector<double> weight) : Process(name) {
-            w = weight;
-        }
+        Filter(std::string name, vector<double> vect) : Process(name), _weight(vect.begin(), vect.end()), _value(0) {}
         void init() {
-            filtered_val =0.0;  
+            if(_weight.size()>channel("link").capacity()){
+                channel("link").change_capacity(_weight.size()*2);
+            }
         }
         void start() {
-            filtered_val = 0.0;
-            channel("link").flush(1);
+            ///for(auto x: _weight)
+            //    std::cout<<x<<" ";
+            //std::cout<<std::endl;
         }
         void update() {
-            //std::cout <<"Channel width : " << channel("link").size() << "\n";
-            if(w.size() <= 0){
-                throw std::range_error("No filter parameters provided."); 
+            if(channel("link").nonempty()){
+                _value = 0;
+                vector<double> data = channel("link").latest(_weight.size());
+                for(int i=0; i<data.size(); i++){
+                    _value += data[i] * _weight[i];
+                    std::cout<<data[i]<<" "<<_weight[i]<<std::endl;
+                }
+                std::cout<<"value: "<<_value<<std::endl;;
             }
-            if(channel("link").size() <= w.size()){
-                double x = channel("link").latest();
-                filtered_val +=x*w[channel("link").size()-1];
-            }
-            //std::cout << "filtered:" << filtered_val << std::endl;
         }
-        inline double value() { return filtered_val; }
+        inline double value() {return _value;}
         void stop() {}
-
       private:
-        // add any private variable you need here
-        double filtered_val;
-        vector<double> w;
+        double _value;
+        vector<double> _weight;
     };
 }
 
