@@ -8,6 +8,7 @@
 //#include "GTestNoDeath.h"
 #include <iostream>
 
+//TestCases for TypedArray and Typed Matrix
 namespace {
     class Point {
         public:

@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 #include "elma.h"
-
+//Random Filter for data coming through the channel
 using std::string;
 using std::vector;
 

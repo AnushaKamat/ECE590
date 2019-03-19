@@ -1,6 +1,6 @@
 #ifndef STOPWATCH_H
 #define STOPWATCH_H
-
+//Stopwatch class
 #include <chrono>
 
 typedef std::chrono::duration<double, std::ratio<60,1>> minutes_type;

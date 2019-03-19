@@ -1,5 +1,15 @@
+//AWS Lambda Server Function
+//Takes in 2 doubles "x", "y" and a string"op" in the body.
+// Body template:
+// "body" ="{/"x/":1.2,/"y/":1.3,/"op/":/"add/"}"
+//returns :
+// {"result" : 2.5}
+// in case of error:
+//returns :
+// {"error" :"missing keys"} //or unknown operator, improper JSON
+
 exports.handler = async (event) => {
-    // TODO implement
+    
     let ans = 0.0;
     let msg = "";
     let body = "";

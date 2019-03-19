@@ -7,6 +7,7 @@
 
 #include "typed_array.h"
 
+//Typed Matrix library made using Typed Array
 template <typename ElementType>
 class TypedMatrix{
 

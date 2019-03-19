@@ -7,7 +7,7 @@
 #include <string>
 #include <tuple>
 #include "elma.h"
-
+//Client Class
 namespace elma {
 
     //! An HTTP client for connecting to json services
